@@ -1,230 +1,128 @@
-# Create a GitHub Action Using TypeScript
+[![build](https://github.com/logickoder/g-drive-upload/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/logickoder/g-drive-upload/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/logickoder/g-drive-upload)](https://goreportcard.com/report/github.com/logickoder/g-drive-upload)
 
-[![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
-![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
-[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
+# g-drive-upload
 
-Use this template to bootstrap the creation of a TypeScript action. :rocket:
+GitHub action that uploads files to Google Drive.
+**This only works with a Google Service Account!**
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
+Thanks to [Team Tumbleweed](https://github.com/team-tumbleweed) for developing the initial version of this actions
+package.
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
+To make a GSA go to the [Credentials Dashboard](https://console.cloud.google.com/apis/credentials). You will need to
+download the **.json key** and base64 encode it. You will use this string as the `credentials` input.
 
-## Create Your Own Action
+You will also need to **share the drive with the servie account.** To do this, just share the folder like you would
+normally with a friend, except you share it with the service account email address. Additionally you will need to give
+the service account acccess to the google drive API.
+Go to `https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project={PROJECT_ID}`.
+Where `{PROJECT_ID}` is the id of your GCP project. Find more info about
+that [here.](https://support.google.com/googleapi/answer/7014113?hl=en)
 
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
+# Inputs
 
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
+## ``filename``
 
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
+Required: **YES**.
 
-## Initial Setup
+The name of the file you want to upload. Wildcards can be used to upload more than one file.
 
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
+## ``name``
 
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
-> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), this template has a `.node-version`
-> file at the root of the repository that will be used to automatically switch
-> to the correct version when you `cd` into the repository. Additionally, this
-> `.node-version` file is used by GitHub Actions in any `actions/setup-node`
-> actions.
+Required: **NO**
 
-1. :hammer_and_wrench: Install the dependencies
+The name you want the file to have in Google Drive. If this input is not provided, it will use only the filename of the
+source path. It will be ignored if there are more than one file to be uploaded.
 
-   ```bash
-   npm install
-   ```
+## ``overwrite``
 
-1. :building_construction: Package the TypeScript for distribution
+Required: **NO**
 
-   ```bash
-   npm run bundle
-   ```
+If you want to overwrite the filename with existing file, it will use the target filename.
 
-1. :white_check_mark: Run the tests
+## ``mimeType``
 
-   ```bash
-   $ npm test
+Required: **NO**
 
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
+file MimeType. If absent, Google Drive will attempt to automatically detect an appropriate value.
 
-   ...
-   ```
+## ``useCompleteSourceFilenameAsName``
 
-## Update the Action Metadata
+Required: **NO**
 
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
+If true, the target file name will be the complete source filename and `name` parameter will be ignored.
 
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
+## ``mirrorDirectoryStructure``
 
-## Update the Action Code
+Required: **NO**
 
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
+If true, the directory structure of the source file will be recreated relative to ``folderId``.
 
-There are a few things to keep in mind when writing your action code:
+## ``namePrefix``
 
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.ts`, you will see that the action is run in an `async` function.
+Required: **NO**
 
-  ```javascript
-  import * as core from '@actions/core'
-  //...
+Prefix to be added to target filename.
 
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
+## ``folderId``
 
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
+Required: **YES**.
 
-So, what are you waiting for? Go ahead and start customizing your action!
+The [ID of the folder](https://ploi.io/documentation/database/where-do-i-get-google-drive-folder-id) you want to upload
+to.
 
-1. Create a new branch
+## ``credentials``
 
-   ```bash
-   git checkout -b releases/v1
-   ```
+Required: **YES**.
 
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
+A string with
+the [GSA credentials](https://stackoverflow.com/questions/46287267/how-can-i-get-the-file-service-account-json-for-google-translate-api/46290808).
 
-   ```bash
-   npm run all
-   ```
+# Usage Example
 
-   > [!WARNING]
-   >
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
+## Simple Workflow
 
-1. Commit your changes
-
-   ```bash
-   git add .
-   git commit -m "My first action is ready!"
-   ```
-
-1. Push them to your repository
-
-   ```bash
-   git push -u origin releases/v1
-   ```
-
-1. Create a pull request and get feedback on your action
-1. Merge the pull request into the `main` branch
-
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
-
+In this example we stored the folderId and credentials as action secrets. This is highly recommended as leaking your
+credentials key will allow anyone to use your service account.
 ```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
+# .github/workflows/main.yml
+name: Main
+on: [ push ]
 
-  - name: Test Local Action
-    id: test-action
-    uses: ./
-    with:
-      milliseconds: 1000
+jobs:
+   my_job:
+      runs-on: ubuntu-latest
 
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+      steps:
+
+         - name: Checkout code
+           uses: actions/checkout@v2
+
+         - name: Archive files
+           run: |
+              sudo apt-get update
+              sudo apt-get install zip
+              zip -r archive.zip *
+
+         - name: Upload to gdrive
+           uses: logickoder/g-drive-upload@main
+           with:
+              credentials: ${{ secrets.credentials }}
+              filename: "archive.zip"
+              folderId: ${{ secrets.folderId }}
+              name: "documentation.zip" # optional string
+              overwrite: "true" # optional boolean
+         - name: Make Directory Structure
+           run: |
+              mkdir -p w/x/y
+              date +%s > w/x/y/z
+         - name: Mirror Directory Structure
+           uses: logickoder/g-drive-upload@main
+           with:
+              credentials: ${{ secrets.DRIVE_CREDENTIALS }}
+              filename: w/x/y/z
+              folderId: ${{ secrets.folderId }}
+              overwrite: "true"
+              mirrorDirectoryStructure: "true"
+
 ```
-
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/typescript-action/actions)! :rocket:
-
-## Usage
-
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: actions/typescript-action@v1 # Commit with the `v1` tag
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
-```
-
-## Publishing a new release
-
-This project includes a helper script designed to streamline the process of
-tagging and pushing new releases for GitHub Actions.
-
-GitHub Actions allows users to select a specific version of the action to use,
-based on release tags. Our script simplifies this process by performing the
-following steps:
-
-1. **Retrieving the latest release tag:** The script starts by fetching the most
-   recent release tag by looking at the local data available in your repository.
-1. **Prompting for a new release tag:** The user is then prompted to enter a new
-   release tag. To assist with this, the script displays the latest release tag
-   and provides a regular expression to validate the format of the new tag.
-1. **Tagging the new release:** Once a valid new tag is entered, the script tags
-   the new release.
-1. **Pushing the new tag to the remote:** Finally, the script pushes the new tag
-   to the remote repository. From here, you will need to create a new release in
-   GitHub and users can easily reference the new tag in their workflows.
