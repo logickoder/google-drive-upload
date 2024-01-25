@@ -23,25 +23,25 @@ export default async function uploadToDrive(
   }
 
   try {
-    await (
-      driveFile ? service.files
-        .update({
+    await (driveFile
+      ? service.files.update({
           fileId: driveFile.id,
           media: media,
           addParents: folderId,
           supportsAllDrives: true
-        }) : service.files
-        .create({
+      })
+      : service.files.create({
           requestBody: {
             name: name,
             parents: [folderId]
           },
           media: media,
           supportsAllDrives: true
-        })
-    )
+      }))
     console.log(`File ${driveFile ? 'updated' : 'uploaded'}`)
   } catch (e) {
-    githubActions.setFailed(`${driveFile ? 'Updating' : 'Creating'} file failed with error: ${e}`)
+    githubActions.setFailed(
+      `${driveFile ? 'Updating' : 'Creating'} file failed with error: ${e}`
+    )
   }
 }

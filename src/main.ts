@@ -27,12 +27,14 @@ export async function run(): Promise<void> {
 
     const mimeType = getInput(inputs.mimeType)
 
-    const useCompleteSourceName = getInput(inputs.useCompleteSourceName) === 'true'
+    const useCompleteSourceName =
+      getInput(inputs.useCompleteSourceName) === 'true'
     if (!useCompleteSourceName) {
       core.warning(`${inputs.useCompleteSourceName} is disabled.`)
     }
 
-    const mirrorDirectoryStructure = getInput(inputs.mirrorDirectoryStructure) === 'true'
+    const mirrorDirectoryStructure =
+      getInput(inputs.mirrorDirectoryStructure) === 'true'
     if (!mirrorDirectoryStructure) {
       core.warning(`${inputs.mirrorDirectoryStructure} is disabled.`)
     }

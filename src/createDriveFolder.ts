@@ -17,9 +17,10 @@ export default async function createDriveDirectory(
       supportsAllDrives: true
     })
 
-    const foundFolders = response.data.files?.filter(
-      (file: any) => file.parents && file.parents.includes(folderId)
-    ) || []
+    const foundFolders =
+      response.data.files?.filter(
+        (file: any) => file.parents && file.parents.includes(folderId)
+      ) || []
 
     if (foundFolders.length === 0) {
       console.log(`Creating folder: ${name}`)

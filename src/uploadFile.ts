@@ -34,7 +34,7 @@ export async function uploadFile(
         if (name === file.name) {
           currentFile = file
 
-          for (const parentId of (file?.parents || [])) {
+          for (const parentId of file?.parents || []) {
             if (parentId === folderId) {
               console.log('File found in expected folder')
               found = true
