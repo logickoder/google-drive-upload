@@ -93,6 +93,7 @@ export async function run(): Promise<void> {
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
+    console.trace()
   }
 }
 
@@ -110,7 +111,7 @@ const inputs = {
   name: 'name',
   folderId: 'folderId',
   credentials: 'credentials',
-  overwrite: 'false',
+  overwrite: 'overwrite',
   mimeType: 'mimeType',
   useCompleteSourceName: 'useCompleteSourceFilenameAsName',
   mirrorDirectoryStructure: 'mirrorDirectoryStructure',
