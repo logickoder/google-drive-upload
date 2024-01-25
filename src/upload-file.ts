@@ -1,6 +1,6 @@
 import { drive_v3 } from '@googleapis/drive'
 import * as core from '@actions/core'
-import uploadToDrive from './uploadToDrive'
+import uploadToDrive from './upload-to-drive'
 
 export async function uploadFile(
   service: drive_v3.Drive,
@@ -9,7 +9,7 @@ export async function uploadFile(
   name: string,
   mimeType: string,
   overwrite: boolean
-) {
+): Promise<void> {
   console.log(`Target file name: ${name}`)
 
   let currentFile = null

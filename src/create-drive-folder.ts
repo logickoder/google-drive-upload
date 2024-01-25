@@ -9,7 +9,7 @@ export default async function createDriveDirectory(
   console.log(`Checking for existing folder ${name}`)
 
   try {
-    const response = await service.files.list({
+    const findDirectoriesResponse = await service.files.list({
       fields: 'files(name,id,mimeType,parents)',
       q: `name='${name}' and mimeType='application/vnd.google-apps.folder'`,
       includeItemsFromAllDrives: true,
@@ -18,14 +18,14 @@ export default async function createDriveDirectory(
     })
 
     const foundFolders =
-      response.data.files?.filter(
-        (file: any) => file.parents && file.parents.includes(folderId)
+      findDirectoriesResponse.data.files?.filter(
+        file => file.parents && file.parents.includes(folderId)
       ) || []
 
     if (foundFolders.length === 0) {
       console.log(`Creating folder: ${name}`)
 
-      const response = await service.files.create({
+      const createFileResponse = await service.files.create({
         requestBody: {
           name,
           mimeType: 'application/vnd.google-apps.folder',
@@ -35,7 +35,7 @@ export default async function createDriveDirectory(
         supportsAllDrives: true
       })
 
-      return response.data.id
+      return createFileResponse.data.id
     } else {
       console.log(`Found existing folder ${name}.`)
       return foundFolders[0].id

@@ -6,10 +6,10 @@ export default async function uploadToDrive(
   service: drive_v3.Drive,
   filename: string,
   folderId: string,
-  driveFile: any,
+  driveFile: drive_v3.Schema$File | null,
   name: string,
   mimeType: string
-) {
+): Promise<void> {
   const stats = fs.lstatSync(filename)
 
   if (stats.isDirectory()) {
@@ -23,19 +23,19 @@ export default async function uploadToDrive(
   }
 
   try {
-    await (driveFile
+    await (driveFile?.id
       ? service.files.update({
           fileId: driveFile.id,
-          media: media,
+        media,
           addParents: folderId,
           supportsAllDrives: true
       })
       : service.files.create({
           requestBody: {
-            name: name,
+            name,
             parents: [folderId]
           },
-          media: media,
+        media,
           supportsAllDrives: true
       }))
     console.log(`File ${driveFile ? 'updated' : 'uploaded'}`)

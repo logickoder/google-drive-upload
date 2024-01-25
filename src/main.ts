@@ -1,9 +1,9 @@
 import * as core from '@actions/core'
 import google from '@googleapis/drive'
 import { glob } from 'glob'
-import { uploadFile } from './uploadFile'
+import { uploadFile } from './upload-file'
 import * as path from 'path'
-import createDriveDirectory from './createDriveFolder'
+import createDriveDirectory from './create-drive-folder'
 
 export async function run(): Promise<void> {
   try {
@@ -96,7 +96,7 @@ export async function run(): Promise<void> {
   }
 }
 
-function getInput(name: string, required: boolean = false): string {
+function getInput(name: string, required = false): string {
   const value = core.getInput(name)
   if (required && !value) {
     core.setFailed(`Missing input '${name}'`)

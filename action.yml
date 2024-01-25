@@ -37,11 +37,6 @@ inputs:
     description: 'Prefix to be added to target filename'
     required: false
 
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
-
 runs:
   using: node20
   main: dist/index.js
