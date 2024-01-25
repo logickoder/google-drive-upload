@@ -30,7 +30,7 @@
     "format:write": "prettier --write **/*.ts",
     "format:check": "prettier --check **/*.ts",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "package": "ncc build src/index.ts --license licenses.txt",
+    "package": "ncc build src/index.ts --license licenses.txt && npm i --package-lock-only",
     "package:watch": "npm run package -- --watch",
     "test": "jest --passWithNoTests",
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
