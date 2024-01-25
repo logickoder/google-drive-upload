@@ -51596,8 +51596,10 @@ async function run() {
             })
         });
         const useSourceFilename = files.length > 1;
+        console.log(`Use source filename: ${useSourceFilename}`);
         // Save the folderId because it might get overwritten by createDriveDirectory
         const originalFolderId = folderId;
+        console.log(`Original folder ID: ${originalFolderId}`);
         for (const file of files) {
             folderId = originalFolderId;
             let targetName;
@@ -51632,9 +51634,10 @@ async function run() {
     }
     catch (error) {
         // Fail the workflow run if an error occurs
-        if (error instanceof Error)
-            core.setFailed(error.message);
-        console.trace();
+        if (error instanceof Error) {
+            core.setFailed(error);
+            console.trace(error.stack);
+        }
     }
 }
 exports.run = run;
