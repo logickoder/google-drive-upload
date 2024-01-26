@@ -1,5 +1,4 @@
-[![build](https://github.com/logickoder/g-drive-upload/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/logickoder/google-drive-upload/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/logickoder/g-drive-upload)](https://goreportcard.com/report/github.com/logickoder/g-drive-upload)
+[![build](https://github.com/logickoder/google-drive-upload/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/logickoder/google-drive-upload/actions)
 
 # google-drive-upload
 
