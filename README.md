@@ -1,6 +1,6 @@
 [![build](https://github.com/logickoder/google-drive-upload/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/logickoder/google-drive-upload/actions)
 
-# google-drive-upload
+# g-drive-upload
 
 GitHub action that uploads files to Google Drive.
 **This only works with a Google Service Account!**
@@ -103,7 +103,7 @@ jobs:
               zip -r archive.zip *
 
          - name: Upload to Google Drive
-           uses: logickoder/google-drive-upload@main
+           uses: logickoder/g-drive-upload@main
            with:
               credentials: ${{ secrets.credentials }}
               filename: "archive.zip"
@@ -115,7 +115,7 @@ jobs:
               mkdir -p w/x/y
               date +%s > w/x/y/z
          - name: Mirror Directory Structure
-           uses: logickoder/google-drive-upload@main
+           uses: logickoder/g-drive-upload@main
            with:
               credentials: ${{ secrets.DRIVE_CREDENTIALS }}
               filename: w/x/y/z
