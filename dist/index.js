@@ -51557,7 +51557,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(9093));
-const drive_1 = __importDefault(__nccwpck_require__(7460));
+const google = __importStar(__nccwpck_require__(7460));
 const glob_1 = __nccwpck_require__(5177);
 const upload_file_1 = __nccwpck_require__(6194);
 const path = __importStar(__nccwpck_require__(1017));
@@ -51588,9 +51588,9 @@ async function run() {
         const filenamePrefix = getInput(inputs.namePrefixInput);
         const credentials = getInput(inputs.credentials, true).trim();
         core.setSecret(credentials);
-        const drive = drive_1.default.drive({
+        const drive = google.drive({
             version: 'v3',
-            auth: new drive_1.default.auth.GoogleAuth({
+            auth: new google.auth.GoogleAuth({
                 credentials: JSON.parse(credentials),
                 scopes: [inputs.scope]
             })

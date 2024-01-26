@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import google from '@googleapis/drive'
+import * as google from '@googleapis/drive'
 import { glob } from 'glob'
 import { uploadFile } from './upload-file'
 import * as path from 'path'
