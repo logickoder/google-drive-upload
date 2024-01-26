@@ -1,20 +1,19 @@
-[![build](https://github.com/logickoder/g-drive-upload/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/logickoder/g-drive-upload/actions)
+[![build](https://github.com/logickoder/g-drive-upload/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/logickoder/google-drive-upload/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/logickoder/g-drive-upload)](https://goreportcard.com/report/github.com/logickoder/g-drive-upload)
 
-# g-drive-upload
+# google-drive-upload
 
 GitHub action that uploads files to Google Drive.
 **This only works with a Google Service Account!**
 
-Thanks to [Team Tumbleweed](https://github.com/team-tumbleweed) for developing the initial version of this actions
-package.
+Based on the go version of the same name by [adityak74](https://github.com/adityak74/google-drive-upload-git-action)
 
 To make a GSA go to the [Credentials Dashboard](https://console.cloud.google.com/apis/credentials). You will need to
-download the **.json key** and base64 encode it. You will use this string as the `credentials` input.
+download the **.json key**. You will use this string as the `credentials` input.
 
 You will also need to **share the drive with the servie account.** To do this, just share the folder like you would
-normally with a friend, except you share it with the service account email address. Additionally you will need to give
-the service account acccess to the google drive API.
+normally with a friend, except you share it with the service account email address. Additionally, you will need to give
+the service account access to the Google Drive API.
 Go to `https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project={PROJECT_ID}`.
 Where `{PROJECT_ID}` is the id of your GCP project. Find more info about
 that [here.](https://support.google.com/googleapi/answer/7014113?hl=en)
@@ -104,8 +103,8 @@ jobs:
               sudo apt-get install zip
               zip -r archive.zip *
 
-         - name: Upload to gdrive
-           uses: logickoder/g-drive-upload@main
+         - name: Upload to Google Drive
+           uses: logickoder/google-drive-upload@main
            with:
               credentials: ${{ secrets.credentials }}
               filename: "archive.zip"
@@ -117,7 +116,7 @@ jobs:
               mkdir -p w/x/y
               date +%s > w/x/y/z
          - name: Mirror Directory Structure
-           uses: logickoder/g-drive-upload@main
+           uses: logickoder/google-drive-upload@main
            with:
               credentials: ${{ secrets.DRIVE_CREDENTIALS }}
               filename: w/x/y/z
