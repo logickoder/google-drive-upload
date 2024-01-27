@@ -43,3 +43,5 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
+          LOG_LEVEL: ERROR
+          ACTIONS_RUNNER_DEBUG: true
