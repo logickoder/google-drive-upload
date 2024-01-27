@@ -51454,7 +51454,7 @@ module.exports.implForWrapper = function (wrapper) {
 
 /***/ }),
 
-/***/ 1414:
+/***/ 5885:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -51513,8 +51513,8 @@ async function createDriveDirectory(service, folderId, name) {
             return foundFolders[0].id;
         }
     }
-    catch (err) {
-        core.setFailed(`Unable to check for/create folder: ${err}`);
+    catch (error) {
+        core.setFailed(`Unable to check for/create folder: ${error.message}`);
         return null;
     }
 }
@@ -51555,44 +51555,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.run = void 0;
+exports.inputs = exports.run = void 0;
 const core = __importStar(__nccwpck_require__(9093));
 const google = __importStar(__nccwpck_require__(7460));
 const glob_1 = __nccwpck_require__(5177);
-const upload_file_1 = __nccwpck_require__(6194);
 const path = __importStar(__nccwpck_require__(1017));
-const create_drive_folder_1 = __importDefault(__nccwpck_require__(1414));
+const upload_file_1 = __importDefault(__nccwpck_require__(6194));
+const create_drive_directory_1 = __importDefault(__nccwpck_require__(5885));
 async function run() {
     try {
-        const filename = getInput(inputs.filename, true);
+        const filename = core.getInput(exports.inputs.filename, { required: true });
         const files = await (0, glob_1.glob)(filename);
         console.log(`Files: ${files}`);
-        if (files.length === 0) {
+        if (!files || files.length === 0) {
             core.setFailed(`No file found! Pattern: ${filename}`);
         }
-        const overwrite = getInput(inputs.overwrite) === 'true';
+        const overwrite = core.getInput(exports.inputs.overwrite) === 'true';
         if (!overwrite) {
-            core.warning(`${inputs.overwrite} is disabled.`);
+            core.warning(`${exports.inputs.overwrite} is disabled.`);
         }
-        const name = getInput(inputs.name);
-        let folderId = getInput(inputs.folderId, true);
-        const mimeType = getInput(inputs.mimeType);
-        const useCompleteSourceName = getInput(inputs.useCompleteSourceName) === 'true';
+        const name = core.getInput(exports.inputs.name);
+        let folderId = core.getInput(exports.inputs.folderId, { required: true });
+        const mimeType = core.getInput(exports.inputs.mimeType);
+        const useCompleteSourceName = core.getInput(exports.inputs.useCompleteSourceName) === 'true';
         if (!useCompleteSourceName) {
-            core.warning(`${inputs.useCompleteSourceName} is disabled.`);
+            core.warning(`${exports.inputs.useCompleteSourceName} is disabled.`);
         }
-        const mirrorDirectoryStructure = getInput(inputs.mirrorDirectoryStructure) === 'true';
+        const mirrorDirectoryStructure = core.getInput(exports.inputs.mirrorDirectoryStructure) === 'true';
         if (!mirrorDirectoryStructure) {
-            core.warning(`${inputs.mirrorDirectoryStructure} is disabled.`);
+            core.warning(`${exports.inputs.mirrorDirectoryStructure} is disabled.`);
         }
-        const filenamePrefix = getInput(inputs.namePrefixInput);
-        const credentials = getInput(inputs.credentials, true).trim();
+        const filenamePrefix = core.getInput(exports.inputs.namePrefixInput);
+        const credentials = core.getInput(exports.inputs.credentials, { required: true });
         core.setSecret(credentials);
         const drive = google.drive({
             version: 'v3',
             auth: new google.auth.GoogleAuth({
                 credentials: JSON.parse(credentials),
-                scopes: [inputs.scope]
+                scopes: [exports.inputs.scope]
             })
         });
         const useSourceFilename = files.length > 1;
@@ -51608,7 +51608,7 @@ async function run() {
                 const directoryStructure = path.dirname(file).split(path.sep);
                 console.log(`Mirroring directory structure: ${directoryStructure}`);
                 for (const dir of directoryStructure) {
-                    const id = await (0, create_drive_folder_1.default)(drive, folderId, dir);
+                    const id = await (0, create_drive_directory_1.default)(drive, folderId, dir);
                     if (id) {
                         folderId = id;
                     }
@@ -51629,26 +51629,16 @@ async function run() {
             else if (filenamePrefix) {
                 targetName = filenamePrefix + targetName;
             }
-            await (0, upload_file_1.uploadFile)(drive, file, folderId, targetName, mimeType, overwrite);
+            await (0, upload_file_1.default)(drive, file, folderId, targetName, mimeType, overwrite);
         }
     }
     catch (error) {
         // Fail the workflow run if an error occurs
-        if (error instanceof Error) {
-            core.setFailed(error);
-            console.trace(error.stack);
-        }
+        core.setFailed(error);
     }
 }
 exports.run = run;
-function getInput(name, required = false) {
-    const value = core.getInput(name);
-    if (required && !value) {
-        core.setFailed(`Missing input '${name}'`);
-    }
-    return value;
-}
-const inputs = {
+exports.inputs = {
     scope: 'https://www.googleapis.com/auth/drive.file',
     filename: 'filename',
     name: 'name',
@@ -51696,7 +51686,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.uploadFile = void 0;
 const core = __importStar(__nccwpck_require__(9093));
 const upload_to_drive_1 = __importDefault(__nccwpck_require__(6361));
 async function uploadFile(service, filename, folderId, name, mimeType, overwrite) {
@@ -51712,7 +51701,7 @@ async function uploadFile(service, filename, folderId, name, mimeType, overwrite
                 supportsAllDrives: true
             });
             const files = response.data.files || [];
-            console.log(`Files: ${files.length}`);
+            console.log(`Found ${files.length} file(s)`);
             for (const file of files) {
                 let found = false;
                 if (name === file.name) {
@@ -51742,7 +51731,7 @@ async function uploadFile(service, filename, folderId, name, mimeType, overwrite
     }
     await (0, upload_to_drive_1.default)(service, filename, folderId, currentFile, name, mimeType);
 }
-exports.uploadFile = uploadFile;
+exports["default"] = uploadFile;
 
 
 /***/ }),

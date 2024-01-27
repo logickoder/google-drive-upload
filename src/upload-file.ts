@@ -2,7 +2,7 @@ import { drive_v3 } from '@googleapis/drive'
 import * as core from '@actions/core'
 import uploadToDrive from './upload-to-drive'
 
-export async function uploadFile(
+export default async function uploadFile(
   service: drive_v3.Drive,
   filename: string,
   folderId: string,
@@ -26,7 +26,7 @@ export async function uploadFile(
 
       const files = response.data.files || []
 
-      console.log(`Files: ${files.length}`)
+      console.log(`Found ${files.length} file(s)`)
 
       for (const file of files) {
         let found = false

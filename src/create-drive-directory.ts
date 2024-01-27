@@ -40,8 +40,10 @@ export default async function createDriveDirectory(
       console.log(`Found existing folder ${name}.`)
       return foundFolders[0].id
     }
-  } catch (err) {
-    core.setFailed(`Unable to check for/create folder: ${err}`)
+  } catch (error) {
+    core.setFailed(
+      `Unable to check for/create folder: ${(error as Error).message}`
+    )
     return null
   }
 }

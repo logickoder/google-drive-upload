@@ -55,8 +55,6 @@ jobs:
         id: test-action
         uses: ./
         with:
-          milliseconds: 2000
-
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+          credentials: GCP_CREDENTIAL
+          filename: README.md
+          folderId: DRIVE_FOLDER_ID

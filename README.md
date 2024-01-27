@@ -1,4 +1,8 @@
-[![build](https://github.com/logickoder/google-drive-upload/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/logickoder/google-drive-upload/actions)
+[![GitHub Super-Linter](https://github.com/logickoder/google-drive-upload/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
+![CI](https://github.com/logickoder/google-drive-upload/actions/workflows/ci.yml/badge.svg)
+[![Check dist/](https://github.com/logickoder/google-drive-upload/actions/workflows/check-dist.yml/badge.svg)](https://github.com/logickoder/google-drive-upload/actions/workflows/check-dist.yml)
+[![CodeQL](https://github.com/logickoder/google-drive-upload/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/logickoder/google-drive-upload/actions/workflows/codeql-analysis.yml)
+[![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
 # g-drive-upload
 

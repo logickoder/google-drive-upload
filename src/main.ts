@@ -1,47 +1,47 @@
 import * as core from '@actions/core'
 import * as google from '@googleapis/drive'
 import { glob } from 'glob'
-import { uploadFile } from './upload-file'
 import * as path from 'path'
-import createDriveDirectory from './create-drive-folder'
+import uploadFile from './upload-file'
+import createDriveDirectory from './create-drive-directory'
 
 export async function run(): Promise<void> {
   try {
-    const filename = getInput(inputs.filename, true)
+    const filename = core.getInput(inputs.filename, { required: true })
 
     const files = await glob(filename)
     console.log(`Files: ${files}`)
 
-    if (files.length === 0) {
+    if (!files || files.length === 0) {
       core.setFailed(`No file found! Pattern: ${filename}`)
     }
 
-    const overwrite = getInput(inputs.overwrite) === 'true'
+    const overwrite = core.getInput(inputs.overwrite) === 'true'
     if (!overwrite) {
       core.warning(`${inputs.overwrite} is disabled.`)
     }
 
-    const name = getInput(inputs.name)
+    const name = core.getInput(inputs.name)
 
-    let folderId = getInput(inputs.folderId, true)
+    let folderId = core.getInput(inputs.folderId, { required: true })
 
-    const mimeType = getInput(inputs.mimeType)
+    const mimeType = core.getInput(inputs.mimeType)
 
     const useCompleteSourceName =
-      getInput(inputs.useCompleteSourceName) === 'true'
+      core.getInput(inputs.useCompleteSourceName) === 'true'
     if (!useCompleteSourceName) {
       core.warning(`${inputs.useCompleteSourceName} is disabled.`)
     }
 
     const mirrorDirectoryStructure =
-      getInput(inputs.mirrorDirectoryStructure) === 'true'
+      core.getInput(inputs.mirrorDirectoryStructure) === 'true'
     if (!mirrorDirectoryStructure) {
       core.warning(`${inputs.mirrorDirectoryStructure} is disabled.`)
     }
 
-    const filenamePrefix = getInput(inputs.namePrefixInput)
+    const filenamePrefix = core.getInput(inputs.namePrefixInput)
 
-    const credentials = getInput(inputs.credentials, true).trim()
+    const credentials = core.getInput(inputs.credentials, { required: true })
 
     core.setSecret(credentials)
 
@@ -96,22 +96,11 @@ export async function run(): Promise<void> {
     }
   } catch (error) {
     // Fail the workflow run if an error occurs
-    if (error instanceof Error) {
-      core.setFailed(error)
-      console.trace(error.stack)
-    }
+    core.setFailed(error as Error)
   }
 }
 
-function getInput(name: string, required = false): string {
-  const value = core.getInput(name)
-  if (required && !value) {
-    core.setFailed(`Missing input '${name}'`)
-  }
-  return value
-}
-
-const inputs = {
+export const inputs = {
   scope: 'https://www.googleapis.com/auth/drive.file',
   filename: 'filename',
   name: 'name',
