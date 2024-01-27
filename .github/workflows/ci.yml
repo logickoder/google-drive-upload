@@ -55,6 +55,6 @@ jobs:
         id: test-action
         uses: ./
         with:
-          credentials: GCP_CREDENTIAL
+          credentials: ${{ secrets.GCP_CREDENTIAL }}
           filename: README.md
-          folderId: DRIVE_FOLDER_ID
+          folderId: ${{ secrets.DRIVE_FOLDER_ID }}
