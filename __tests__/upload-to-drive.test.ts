@@ -25,7 +25,8 @@ describe('uploadToDrive', () => {
 
     mockDriveService = {
       files: {
-        update: jest.fn()
+        update: jest.fn(),
+        create: jest.fn()
       }
     } as unknown as jest.Mocked<drive_v3.Drive>
   })
@@ -48,7 +49,7 @@ describe('uploadToDrive', () => {
     expect(githubActions.setFailed).not.toHaveBeenCalled()
   })
 
-  it('should upload or update file successfully', async () => {
+  it('should update file successfully', async () => {
     ;(fs.lstatSync as jest.Mock).mockReturnValueOnce({
       isDirectory: () => false
     })
@@ -66,31 +67,48 @@ describe('uploadToDrive', () => {
     expect(fs.lstatSync).toHaveBeenCalledWith('mockFileName')
     expect(fs.createReadStream).toHaveBeenCalledWith('mockFileName')
 
-    const expectedRequestBody = {
-      name: 'mockName',
-      parents: ['mockFolderId']
-    }
+    expect(mockDriveService.files.update).toHaveBeenCalledWith({
+      fileId: 'mockFileId',
+      media: {
+        mimeType: 'mockMimeType',
+        body: 'mockReadStream'
+      },
+      addParents: 'mockFolderId',
+      supportsAllDrives: true
+    })
 
-    if (mockDriveFile) {
-      expect(mockDriveService.files.update).toHaveBeenCalledWith({
-        fileId: 'mockFileId',
-        media: {
-          mimeType: 'mockMimeType',
-          body: 'mockReadStream'
-        },
-        addParents: 'mockFolderId',
-        supportsAllDrives: true
-      })
-    } else {
-      expect(mockDriveService.files.create).toHaveBeenCalledWith({
-        requestBody: expectedRequestBody,
-        media: {
-          mimeType: 'mockMimeType',
-          body: 'mockReadStream'
-        },
-        supportsAllDrives: true
-      })
-    }
+    expect(githubActions.setFailed).not.toHaveBeenCalled()
+  })
+
+  it('should create file successfully', async () => {
+    ;(fs.lstatSync as jest.Mock).mockReturnValueOnce({
+      isDirectory: () => false
+    })
+    ;(fs.createReadStream as jest.Mock).mockReturnValueOnce('mockReadStream')
+
+    await uploadToDrive(
+      mockDriveService,
+      'mockFileName',
+      'mockFolderId',
+      null,
+      'mockName',
+      'mockMimeType'
+    )
+
+    expect(fs.lstatSync).toHaveBeenCalledWith('mockFileName')
+    expect(fs.createReadStream).toHaveBeenCalledWith('mockFileName')
+
+    expect(mockDriveService.files.create).toHaveBeenCalledWith({
+      requestBody: {
+        name: 'mockName',
+        parents: ['mockFolderId']
+      },
+      media: {
+        mimeType: 'mockMimeType',
+        body: 'mockReadStream'
+      },
+      supportsAllDrives: true
+    })
 
     expect(githubActions.setFailed).not.toHaveBeenCalled()
   })

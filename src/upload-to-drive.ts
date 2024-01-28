@@ -17,12 +17,15 @@ export default async function uploadToDrive(
     return
   }
 
+  console.log(`Uploading ${filename} to ${folderId}`)
+
   const media = {
     mimeType,
     body: fs.createReadStream(filename)
   }
 
   try {
+    console.log(`Target file name: ${name}`)
     if (driveFile?.id) {
       console.log(`Updating file: ${driveFile.name} (${driveFile.id})`)
       await service.files.update({

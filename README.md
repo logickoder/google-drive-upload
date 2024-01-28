@@ -25,16 +25,16 @@ service account access to the Google Drive API. Go to
 Where `{PROJECT_ID}` is the ID of your GCP project. Find more info about that
 [here.](https://support.google.com/googleapi/answer/7014113?hl=en)
 
-# Inputs
+## Inputs
 
-## `filename`
+### `filename`
 
 Required: **YES**.
 
 The name of the file you want to upload. Wildcards can be used to upload more
 than one file.
 
-## `name`
+### `name`
 
 Required: **NO**
 
@@ -42,41 +42,41 @@ The name you want the file to have in Google Drive. If this input is not
 provided, it will use only the filename of the source path. It will be ignored
 if there are more than one file to be uploaded.
 
-## `overwrite`
+### `overwrite`
 
 Required: **NO**
 
 If you want to overwrite the filename with existing file, it will use the target
 filename.
 
-## `mimeType`
+### `mimeType`
 
 Required: **NO**
 
 file MimeType. If absent, Google Drive will attempt to automatically detect an
 appropriate value.
 
-## `useCompleteSourceFilenameAsName`
+### `useCompleteSourceFilenameAsName`
 
 Required: **NO**
 
 If true, the target filename will be the complete source filename and `name`
 parameter will be ignored.
 
-## `mirrorDirectoryStructure`
+### `mirrorDirectoryStructure`
 
 Required: **NO**
 
 If true, the directory structure of the source file will be recreated relative
 to `folderId`.
 
-## `namePrefix`
+### `namePrefix`
 
 Required: **NO**
 
 Prefix to be added to target filename.
 
-## `folderId`
+### `folderId`
 
 Required: **YES**.
 
@@ -84,16 +84,16 @@ The
 [ID of the folder](https://ploi.io/documentation/database/where-do-i-get-google-drive-folder-id)
 you want to upload to.
 
-## `credentials`
+### `credentials`
 
 Required: **YES**.
 
 A string with the
 [GSA credentials](https://stackoverflow.com/questions/46287267/how-can-i-get-the-file-service-account-json-for-google-translate-api/46290808).
 
-# Usage Example
+## Usage Example
 
-## Simple Workflow
+### Simple Workflow
 
 In this example we stored the folderId and credentials as action secrets. This
 is highly recommended as leaking your credentials key will allow anyone to use
