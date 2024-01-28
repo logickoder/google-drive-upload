@@ -38,10 +38,10 @@ export default async function uploadToDrive(
           media,
           supportsAllDrives: true
         }))
-    console.log(`File ${driveFile ? 'updated' : 'uploaded'}`)
+    console.log(`File ${driveFile?.id ? 'updated' : 'uploaded'}`)
   } catch (e) {
     githubActions.setFailed(
-      `${driveFile ? 'Updating' : 'Creating'} file failed with error: ${e}`
+      `${driveFile?.id ? 'Updating' : 'Creating'} file failed with error: ${e}`
     )
   }
 }
