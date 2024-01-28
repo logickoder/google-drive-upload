@@ -136,7 +136,10 @@ describe('uploadToDrive', () => {
     expect(fs.lstatSync).toHaveBeenCalledWith('mockFileName')
     expect(fs.createReadStream).toHaveBeenCalledWith('mockFileName')
 
-    const expectedErrorMessage = `${mockDriveFile ? 'Updating' : 'Creating'} file failed with error: ${mockError}`
-    expect(githubActions.setFailed).toHaveBeenCalledWith(expectedErrorMessage)
+    expect(githubActions.setFailed).toHaveBeenCalledWith(
+      `${
+        mockDriveFile ? 'Updating' : 'Creating'
+      } file failed with error: ${mockError}`
+    )
   })
 })
