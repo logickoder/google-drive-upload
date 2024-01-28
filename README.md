@@ -1,10 +1,10 @@
+# g-drive-upload
+
 [![GitHub Super-Linter](https://github.com/logickoder/google-drive-upload/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/logickoder/google-drive-upload/actions/workflows/ci.yml/badge.svg)
 [![Check dist/](https://github.com/logickoder/google-drive-upload/actions/workflows/check-dist.yml/badge.svg)](https://github.com/logickoder/google-drive-upload/actions/workflows/check-dist.yml)
 [![CodeQL](https://github.com/logickoder/google-drive-upload/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/logickoder/google-drive-upload/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
-
-# g-drive-upload
 
 GitHub action that uploads files to Google Drive.
 **This only works with a Google Service Account!**
@@ -18,7 +18,7 @@ You will also need to **share the drive with the servie account.** To do this, j
 normally with a friend, except you share it with the service account email address. Additionally, you will need to give
 the service account access to the Google Drive API.
 Go to `https://console.developers.google.com/apis/api/drive.googleapis.com/overview?project={PROJECT_ID}`.
-Where `{PROJECT_ID}` is the id of your GCP project. Find more info about
+Where `{PROJECT_ID}` is the ID of your GCP project. Find more info about
 that [here.](https://support.google.com/googleapi/answer/7014113?hl=en)
 
 # Inputs
@@ -52,7 +52,7 @@ file MimeType. If absent, Google Drive will attempt to automatically detect an a
 
 Required: **NO**
 
-If true, the target file name will be the complete source filename and `name` parameter will be ignored.
+If true, the target filename will be the complete source filename and `name` parameter will be ignored.
 
 ## ``mirrorDirectoryStructure``
 

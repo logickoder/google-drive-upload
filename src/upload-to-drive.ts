@@ -23,21 +23,40 @@ export default async function uploadToDrive(
   }
 
   try {
-    await (driveFile?.id
-      ? service.files.update({
-          fileId: driveFile.id,
-          media,
-          addParents: folderId,
-          supportsAllDrives: true
-        })
-      : service.files.create({
-          requestBody: {
-            name,
-            parents: [folderId]
-          },
-          media,
-          supportsAllDrives: true
-        }))
+    if (driveFile?.id) {
+      console.log(`Updating file: ${driveFile.name} (${driveFile.id})`)
+      await service.files.update({
+        fileId: driveFile.id,
+        media,
+        addParents: folderId,
+        supportsAllDrives: true
+      })
+    } else {
+      console.log('No similar files found. Creating a new file')
+      await service.files.create({
+        requestBody: {
+          name,
+          parents: [folderId]
+        },
+        media,
+        supportsAllDrives: true
+      })
+    }
+    // await (driveFile?.id
+    //   ? service.files.update({
+    //       fileId: driveFile.id,
+    //       media,
+    //       addParents: folderId,
+    //       supportsAllDrives: true
+    //     })
+    //   : service.files.create({
+    //       requestBody: {
+    //         name,
+    //         parents: [folderId]
+    //       },
+    //       media,
+    //       supportsAllDrives: true
+    //     }))
     console.log(`File ${driveFile?.id ? 'updated' : 'uploaded'}`)
   } catch (e) {
     githubActions.setFailed(
