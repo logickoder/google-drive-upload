@@ -32,7 +32,7 @@ export default async function uploadToDrive(
         supportsAllDrives: true
       })
     } else {
-      console.log('No similar files found. Creating a new file')
+      console.log('No files found. Creating a new file')
       await service.files.create({
         requestBody: {
           name,

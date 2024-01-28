@@ -13,25 +13,35 @@ inputs:
     description: 'the service account credentials'
     required: true
   filename:
-    description: 'the name of the file you want to upload. Wildcards can be used to upload more than one file'
+    description:
+      'the name of the file you want to upload. Wildcards can be used to upload
+      more than one file'
     required: true
   folderId:
     description: 'the Id of the parent folder you want to upload the file in'
     required: true
   name:
-    description: 'what you want the file to be called in Google Drive. Ignored if there are more than one file to be uploaded'
+    description:
+      'what you want the file to be called in Google Drive. Ignored if there are
+      more than one file to be uploaded'
     required: false
   overwrite:
     description: 'if you want to overwrite an existing file in Google Drive '
     required: false
   mimeType:
-    description: 'file MimeType. If absent, Google Drive will attempt to automatically detect an appropriate value'
+    description:
+      'file MimeType. If absent, Google Drive will attempt to automatically
+      detect an appropriate value'
     required: false
   useCompleteSourceFilenameAsName:
-    description: 'If true, the target file name will be the source filename and name parameter will be ignored'
+    description:
+      'If true, the target file name will be the source filename and name
+      parameter will be ignored'
     required: false
   mirrorDirectoryStructure:
-    description: 'If true, recreate the directory structure of the source file relative to the folderId'
+    description:
+      'If true, recreate the directory structure of the source file relative to
+      the folderId'
     required: false
   namePrefix:
     description: 'Prefix to be added to target filename'
