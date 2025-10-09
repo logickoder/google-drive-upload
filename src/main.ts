@@ -59,14 +59,18 @@ export async function run(): Promise<void> {
       core.setSecret(clientSecret)
       core.setSecret(refreshToken)
 
-      core.warning(`Using OAuth ${inputs.authType} authentication. Make sure the refresh token has the proper scopes. ${clientId} ${clientSecret} ${refreshToken}`)
+      core.warning(
+        `Using OAuth ${inputs.authType} authentication. Make sure the refresh token has the proper scopes. ${clientId} ${clientSecret} ${refreshToken}`
+      )
 
       auth = new google.auth.OAuth2(clientId, clientSecret)
       auth.setCredentials({
         refresh_token: refreshToken
       })
 
-      core.warning('OAuth authentication may have quota limitations. See https://developers.google.com/drive/api/v3/handle-errors for details.')
+      core.warning(
+        'OAuth authentication may have quota limitations. See https://developers.google.com/drive/api/v3/handle-errors for details.'
+      )
       console.log('Using OAuth authentication')
     } else {
       // Service account authentication (backward compatibility)

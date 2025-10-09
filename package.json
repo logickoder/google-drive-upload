@@ -1,7 +1,7 @@
 {
   "name": "g-drive-upload",
   "description": "Upload files to Google Drive",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Jeffery Orazulike",
   "private": true,
   "homepage": "https://github.com/logickoder/google-drive-upload",
@@ -24,16 +24,16 @@
     "node": ">=20"
   },
   "scripts": {
-    "bundle": "npm run format:write && npm run package",
+    "bundle": "pnpm run format:write && pnpm run package",
     "ci-test": "jest",
     "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",
     "format:write": "prettier --write **/*.ts",
     "format:check": "prettier --check **/*.ts",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "package": "ncc build src/index.ts --license licenses.txt && npm i --package-lock-only",
-    "package:watch": "npm run package -- --watch",
+    "package": "ncc build src/index.ts --license licenses.txt && pnpm i --lockfile-only",
+    "package:watch": "pnpm run package -- --watch",
     "test": "jest",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
+    "all": "pnpm run format:write && pnpm run lint && pnpm run test && pnpm run coverage && pnpm run package"
   },
   "license": "MIT",
   "jest": {
