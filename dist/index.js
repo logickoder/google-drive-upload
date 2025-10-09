@@ -48324,7 +48324,6 @@ async function run() {
         // Authentication setup - support both OAuth and service account
         const authType = core.getInput(exports.inputs.authType) || 'service';
         let auth;
-        core.warning(`Authentication type: ${authType}`);
         if (authType === 'oauth') {
             const clientId = core.getInput(exports.inputs.clientId, { required: true });
             const clientSecret = core.getInput(exports.inputs.clientSecret, {
@@ -48336,12 +48335,10 @@ async function run() {
             core.setSecret(clientId);
             core.setSecret(clientSecret);
             core.setSecret(refreshToken);
-            core.warning(`Using OAuth ${exports.inputs.authType} authentication. Make sure the refresh token has the proper scopes. ${clientId} ${clientSecret} ${refreshToken}`);
             auth = new google.auth.OAuth2(clientId, clientSecret);
             auth.setCredentials({
                 refresh_token: refreshToken
             });
-            core.warning('OAuth authentication may have quota limitations. See https://developers.google.com/drive/api/v3/handle-errors for details.');
             console.log('Using OAuth authentication');
         }
         else {

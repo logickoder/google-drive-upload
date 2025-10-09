@@ -15,19 +15,69 @@ Based on the go version of the same name by
 
 ### OAuth Authentication (Recommended)
 
-Since Google has deprecated service accounts for personal Google Drive uploads, OAuth is now the recommended
-authentication method.
+Since Google has deprecated service accounts for personal Google Drive uploads, OAuth is now the recommended authentication method.
 
-To set up OAuth:
+#### Detailed OAuth Setup Instructions
 
+**Step 1: Create Google Cloud Project**
 1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project or select an existing one
-3. Enable the Google Drive API
-4. Go to "Credentials" > "Create Credentials" > "OAuth 2.0 Client IDs"
-5. Configure the OAuth consent screen
-6. Create an OAuth 2.0 client ID for a "Desktop application"
-7. Download the client configuration
-8. Use the OAuth 2.0 Playground or your own app to generate a refresh token
+3. Enable the Google Drive API:
+   - Go to "APIs & Services" > "Library"
+   - Search for "Google Drive API"
+   - Click on it and press "Enable"
+
+**Step 2: Configure OAuth Consent Screen**
+1. Go to "APIs & Services" > "OAuth consent screen"
+2. Choose "External" user type (unless you're using Google Workspace)
+3. Fill in the required fields:
+   - App name: Your app name (e.g., "GitHub Actions Drive Upload")
+   - User support email: Your email
+   - Developer contact information: Your email
+4. Add scopes:
+   - Click "Add or Remove Scopes"
+   - Add `https://www.googleapis.com/auth/drive` or `https://www.googleapis.com/auth/drive.file`
+5. Add test users (your email address)
+6. Save and continue
+
+**Step 3: Create OAuth 2.0 Credentials**
+1. Go to "APIs & Services" > "Credentials"
+2. Click "Create Credentials" > "OAuth 2.0 Client IDs"
+3. **Important:** Choose "Web application" as the application type
+4. Add authorized redirect URI:
+   - Click "Add URI"
+   - Enter: `https://developers.google.com/oauthplayground`
+5. Click "Create"
+6. Save the generated Client ID and Client Secret
+
+**Step 4: Generate Refresh Token**
+1. Go to [Google OAuth 2.0 Playground](https://developers.google.com/oauthplayground/)
+2. Click the gear icon (⚙️) in the top right corner
+3. Check "Use your own OAuth credentials"
+4. Enter your Client ID and Client Secret from Step 3
+5. Close the settings dialog
+6. In "Step 1: Select & authorize APIs":
+   - Find "Drive API v3" in the list
+   - Select `https://www.googleapis.com/auth/drive` (or `https://www.googleapis.com/auth/drive.file` for limited access)
+   - Click "Authorize APIs"
+7. Sign in with your Google account and grant permissions
+8. In "Step 2: Exchange authorization code for tokens":
+   - Click "Exchange authorization code for tokens"
+   - **Copy the refresh_token** from the response (you'll need this for GitHub secrets)
+
+**Step 5: Store Credentials as GitHub Secrets**
+1. Go to your GitHub repository
+2. Navigate to Settings > Secrets and variables > Actions
+3. Add the following repository secrets:
+   - `GOOGLE_CLIENT_ID`: Your OAuth client ID
+   - `GOOGLE_CLIENT_SECRET`: Your OAuth client secret
+   - `GOOGLE_REFRESH_TOKEN`: The refresh token from the OAuth playground
+
+#### Important Notes for OAuth Setup
+- **Use "Web application" type**: This ensures compatibility with the OAuth playground redirect URI
+- **Authorized redirect URI**: Must include `https://developers.google.com/oauthplayground` for token generation
+- **Refresh token**: Only appears on first authorization or when `access_type=offline` and `prompt=consent` are used
+- **Folder access**: No manual sharing required - the action inherits your Google Drive permissions
 
 ### Service Account Authentication (Legacy)
 
