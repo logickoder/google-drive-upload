@@ -41,16 +41,45 @@ export async function run(): Promise<void> {
 
     const filenamePrefix = core.getInput(inputs.namePrefixInput)
 
-    const credentials = core.getInput(inputs.credentials, { required: true })
+    // Authentication setup - support both OAuth and service account
+    const authType = core.getInput(inputs.authType) || 'service'
+    let auth
 
-    core.setSecret(credentials)
+    if (authType === 'oauth') {
+      const clientId = core.getInput(inputs.clientId, { required: true })
+      const clientSecret = core.getInput(inputs.clientSecret, {
+        required: true
+      })
+      const refreshToken = core.getInput(inputs.refreshToken, {
+        required: true
+      })
 
-    const drive = google.drive({
-      version: 'v3',
-      auth: new google.auth.GoogleAuth({
+      core.setSecret(clientId)
+      core.setSecret(clientSecret)
+      core.setSecret(refreshToken)
+
+      auth = new google.auth.OAuth2(clientId, clientSecret)
+      auth.setCredentials({
+        refresh_token: refreshToken
+      })
+
+      console.log('Using OAuth authentication')
+    } else {
+      // Service account authentication (backward compatibility)
+      const credentials = core.getInput(inputs.credentials, { required: true })
+      core.setSecret(credentials)
+
+      auth = new google.auth.GoogleAuth({
         credentials: JSON.parse(credentials),
         scopes: [inputs.scope]
       })
+
+      console.log('Using service account authentication')
+    }
+
+    const drive = google.drive({
+      version: 'v3',
+      auth
     })
 
     const useSourceFilename = files.length > 1
@@ -110,5 +139,9 @@ export const inputs = {
   mimeType: 'mimeType',
   useCompleteSourceName: 'useCompleteSourceFilenameAsName',
   mirrorDirectoryStructure: 'mirrorDirectoryStructure',
-  namePrefixInput: 'namePrefix'
+  namePrefixInput: 'namePrefix',
+  authType: 'authType',
+  clientId: 'clientId',
+  clientSecret: 'clientSecret',
+  refreshToken: 'refreshToken'
 }
